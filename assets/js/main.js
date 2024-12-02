@@ -4,22 +4,16 @@ const navToggle = document.getElementById('nav-toggle');
 const navClose = document.getElementById('nav-close');
 
 /* MENU SHOW AND HIDE */
-if (navMenu) {
-    if (navToggle) {
-        navToggle.addEventListener('click', () => {
-            navMenu.classList.add('show-menu');
-        });
-    } else {
-        console.warn('Navigation toggle element not found.');
-    }
+if (navMenu && navToggle && navClose) {
+    navToggle.addEventListener('click', () => {
+        navMenu.classList.add('show-menu');
+    });
 
-    if (navClose) {
-        navClose.addEventListener('click', () => {
-            navMenu.classList.remove('show-menu');
-        });
-    } else {
-        console.warn('Navigation close element not found.');
-    }
+    navClose.addEventListener('click', () => {
+        navMenu.classList.remove('show-menu');
+    });
+} else {
+    console.warn('Navigation elements not found.');
 }
 
 /* REMOVE MENU ON MOBILE LINK CLICK */
@@ -30,8 +24,9 @@ navLinks.forEach((link) =>
     })
 );
 
-/* CHANGE BACKGROUND HEADER */
+/*=============== CHANGE BACKGROUND HEADER ===============*/
 let lastScrollY = 0;
+
 function scrollHeader() {
     const header = document.getElementById('header');
     if (!header) return;
@@ -43,7 +38,15 @@ function scrollHeader() {
     }
     lastScrollY = window.scrollY;
 }
-window.addEventListener('scroll', scrollHeader);
+
+// Throttle scroll event for performance
+let isScrolling = false;
+window.addEventListener('scroll', () => {
+    if (!isScrolling) {
+        isScrolling = true;
+        requestAnimationFrame(scrollHeader);
+    }
+});
 
 /*=============== POPULAR SWIPER ===============*/
 let swiperPopular = new Swiper(".popular__container", { 
@@ -77,23 +80,22 @@ let mixerFeatured = mixitup('.featured__content', {
 
 /* Link active featured */ 
 const linkFeatured = document.querySelectorAll('.featured__item');
-function activeFeatured() {
-    linkFeatured.forEach(l=> l.classList.remove('active-featured'));
-    this.classList.add('active-featured');
+function activeFeatured(event) {
+    linkFeatured.forEach(l => l.classList.remove('active-featured'));
+    event.target.classList.add('active-featured');
 }
-linkFeatured.forEach(l=> l.addEventListener('click', activeFeatured));
+linkFeatured.forEach(l => l.addEventListener('click', activeFeatured));
 
 /*=============== SHOW SCROLL UP ===============*/ 
 function scrollUp() {
     const scrollUp = document.getElementById('scroll-up');
-    if(this.scrollY >= 350) scrollUp.classList.add('show-scroll');
+    if (window.scrollY >= 350) scrollUp.classList.add('show-scroll');
 }
 
 window.addEventListener('scroll', scrollUp);
 
 /*=============== SCROLL SECTIONS ACTIVE LINK ===============*/
 const sections = document.querySelectorAll('section[id]');
-
 function scrollActive() {
     const scrollY = window.pageYOffset;
 
@@ -102,14 +104,23 @@ function scrollActive() {
             sectionTop = current.offsetTop - 58,
             sectionId = current.getAttribute('id');
 
+        const navLink = document.querySelector('.nav__menu a[href*=' + sectionId + ']');
         if (scrollY > sectionTop && scrollY <= sectionTop + sectionHeight) {
-            document.querySelector('.nav__menu a[href*=' + sectionId + ']').classList.add('active-link');
+            navLink.classList.add('active-link');
         } else {
-            document.querySelector('.nav__menu a[href*=' + sectionId + ']').classList.remove('active-link');
+            navLink.classList.remove('active-link');
         }
-    })
+    });
 }
-window.addEventListener('scroll', scrollActive);
+
+// Throttle scroll event for performance
+let isScrollingActiveLink = false;
+window.addEventListener('scroll', () => {
+    if (!isScrollingActiveLink) {
+        isScrollingActiveLink = true;
+        requestAnimationFrame(scrollActive);
+    }
+});
 
 /*=============== SCROLL REVEAL ANIMATION ===============*/
 const sr = ScrollReveal({
@@ -117,19 +128,17 @@ const sr = ScrollReveal({
     distance: '60px',
     duration: 2500,
     delay: 400,
-    //reset: true,
-})
+    reset: true, // enables animation reset on scroll
+});
 
-sr.reveal('.home__title, popular__container, features__img, featured__filters')
-sr.reveal('.home__subtitle', { delay: 500 })
-sr.reveal('.home__elec', { delay: 600 })
-sr.reveal('.home__img', { delay: 800 })
-sr.reveal('.home__car-data', { delay: 900, interval: 100, origin: 'bottom' })
-sr.reveal('.home__button', { delay: 1000, origin: 'bottom' })
-sr.reveal('.about__group, .offer__data', { origin: 'left'})
-sr.reveal('.about__data, offer__img', { origin: 'right'})
-sr.reveal('.features__map', { delay: 600, origin: 'bottom'})
-sr.reveal('.features__card', { interval: 300})
-sr.reveal('.featured__card, logos__content, .footer__content', { interval: 100})
-
-
+sr.reveal('.home__title, .popular__container, .features__img, .featured__filters');
+sr.reveal('.home__subtitle', { delay: 500 });
+sr.reveal('.home__elec', { delay: 600 });
+sr.reveal('.home__img', { delay: 800 });
+sr.reveal('.home__car-data', { delay: 900, interval: 100, origin: 'bottom' });
+sr.reveal('.home__button', { delay: 1000, origin: 'bottom' });
+sr.reveal('.about__group, .offer__data', { origin: 'left' });
+sr.reveal('.about__data, .offer__img', { origin: 'right' });
+sr.reveal('.features__map', { delay: 600, origin: 'bottom' });
+sr.reveal('.features__card', { interval: 300 });
+sr.reveal('.featured__card, .logos__content, .footer__content', { interval: 100 });

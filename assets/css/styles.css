@@ -1,6 +1,5 @@
 /*=============== GOOGLE FONTS ===============*/
-@import url("https://fonts.googleapis.com/css2?family=Exo:wght@400;500;600&display=swap"); /*Specific*/
-@import url('https://fonts.googleapis.com/css2?family=Exo:ital,wght@0,100..900;1,100..900&display=swap'); /*All styles*/
+@import url('https://fonts.googleapis.com/css2?family=Exo:ital,wght@0,100..900;1,100..900&display=swap');
 
 /*=============== VARIABLES CSS ===============*/
 :root {
@@ -30,6 +29,9 @@
   /*========== Font weight ==========*/
   --font-medium: 500;
   --font-semi-bold: 600;
+  --z-header: 1000;
+  --z-menu: 999;
+  --z-overlay: 998;
 
   /*========== z index ==========*/
   --z-tooltip: 10;
@@ -88,8 +90,7 @@ img {
 /*=============== REUSABLE CSS CLASSES ===============*/
 .container {
   max-width: 1024px;
-  margin-right: 1.5rem;
-  margin-left: 1.5rem;
+  margin: 0 1.5rem;
 }
 
 .grid {
@@ -139,7 +140,7 @@ img {
   top: 0;
   left: 0;
   width: 100%;
-  z-index: var(--z-fixed);
+  z-index: var(--z-header);
   background-color: transparent;
   transition: background-color 0.3s ease;
 }
@@ -185,7 +186,9 @@ img {
     width: 100%;
     height: 100%;
     backdrop-filter: blur(96px);
-    transition: .3s;
+    transition: transform 0.3s ease-in-out;
+    transform: translateX(100%);
+    z-index: var(--z-menu);
   }
 }
 
@@ -205,9 +208,11 @@ img {
   transition: .3s;
 }
 
-.nav__link:hover {
+.nav__link:hover, .nav__link:focus {
   color: var(--first-color);
+  text-decoration: underline;
 }
+
 
 .nav__close {
   font-size: 2rem;
@@ -221,6 +226,7 @@ img {
 /* Show menu */
 .show-menu {
   right: 0;
+  transform: translateX(0);
 }
 
 /* Change background header */
@@ -327,6 +333,7 @@ img {
   font-size: var(--small-font-size);
   color: var(--white-color);
   font-weight: var(--font-medium);
+  transition: transform 0.3s ease-in-out;
 }
 
 .home__button::before {
@@ -341,18 +348,14 @@ img {
   animation: button 3s infinite;
 }
 
-.home .shape__big, .home .shape__small {
-  position: absolute;
-}
-
 .home .shape__big {
-  left: -9rem;
-  top: -4rem;
+  left: -15%;
+  top: -10%;
 }
 
 .home .shape__small {
-  right: -10rem;
-  bottom: 3rem;
+  right: -20%;
+  bottom: 10%;
 }
 
 /* Button animate */
@@ -381,6 +384,13 @@ img {
 
 .button:hover {
   background-color: var(--first-color-alt);
+  transform: scale(1.05);
+  box-shadow: 0 4px 8px hsla(158, 98%, 43%, 0.3);
+}
+
+.button:focus {
+  outline: 2px solid var(--first-color-alt);
+  outline-offset: 2px;
 }
 
 /*=============== ABOUT ===============*/
@@ -398,7 +408,8 @@ img {
 }
 
 .about__card {
-  width: 180px;
+  width: 90%;
+  max-width: 180px;
   position: absolute;
   right: 0;
   bottom: -2.5rem;
@@ -511,13 +522,21 @@ img {
   transform: translateY(-.25rem);
 }
 
+.popular__button:hover {
+  background-color: var(--first-color);
+  color: var(--white-color);
+}
+
 /* Swiper class */
 .swiper-pagination-bullet {
   background: var(--text-color);
+  border: 1px solid var(--first-color);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 .swiper-pagination-bullet-active {
   background-color: var(--first-color);
+  transform: scale(1.2);
 }
 /*=============== FEATURES ===============*/
 .features {
@@ -631,8 +650,9 @@ img {
 }
 
 .featured__content {
-  grid-template-columns: 228px;
-  row-gap: 2.5rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 2rem;
   justify-content: center;
 }
 
@@ -693,6 +713,11 @@ img {
   transform: translateX(-.25rem);
 }
 
+.featured__card:hover {
+  transform: scale(1.02);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
+
 /* Active link featured */
 .active-featured {
   background-color: var(--first-color);
@@ -708,7 +733,10 @@ img {
 }
 
 .offer__container {
-  grid-template-rows: max-content 224px;
+  display: flex;
+  flex-direction: column-reverse;
+  align-items: center;
+  text-align: center;
 }
 
 .offer__bg {
@@ -721,12 +749,25 @@ img {
   object-position: center;
 }
 
+.offer__bg::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 1;
+}
+
 .offer__data, .offer__img {
   position: relative;
 }
 
 .offer__data {
   text-align: center;
+  position: relative;
+  z-index: 2;
 }
 
 .offer__title {
@@ -740,9 +781,10 @@ img {
 .offer__img {
   position: absolute;
   max-width: initial;
-  width: 400px;
-  bottom: 2rem;
-  right: -5.5rem;
+  width: 100%;
+  margin: 1rem auto 0;
+  position: static;
+  display: block;
 }
 
 /*=============== LOGOS ===============*/
@@ -762,6 +804,7 @@ img {
 
 .logos__img:hover {
   opacity: 1;
+  transform: scale(1.1);
 }
 
 /*=============== FOOTER ===============*/
@@ -829,11 +872,14 @@ img {
 
 .footer__link:hover, .footer__social-link:hover {
   color: var(--title-color);
+  text-decoration: underline;
+  transition: color 0.3s ease, text-decoration 0.3s ease;
 }
 
 .footer__social {
   display: flex;
   column-gap: 1.5rem;
+  justify-content: center;
 }
 
 .footer__social-link {
@@ -881,7 +927,9 @@ img {
 }
 
 .scrollup:hover {
-  transform: translateY(-.25rem);
+  transform: translateY(-.25rem) rotate(15deg);
+  background-color: var(--first-color);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
 }
 
 /* Show Scroll Up*/
@@ -893,8 +941,7 @@ img {
 /* For small devices */
 @media screen and (max-width: 320px) {
   .container {
-    margin-left: 1rem;
-    margin-right: 1rem;
+    margin: 0 5%;
   }
 
   .home__car {
@@ -903,6 +950,7 @@ img {
 
   .about__card {
     width: 150px;
+    margin: 0 auto;
   }
 
   .offer__container {
@@ -925,19 +973,25 @@ img {
     justify-self: center;
   }
 
+  .container {
+    margin: 0 auto;
+    max-width: 540px;
+  }
+
   .features__map {
     left: 0;
     right: 0;
   }
 
   .featured__content {
-    grid-template-columns: repeat(2, 228px);
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   }
 
   .offer__container {
     grid-template-rows: initial;
     grid-template-columns: .5fr;
     justify-content: center;
+    padding: 2rem 1rem;
   }
 
   .offer__img {
@@ -991,8 +1045,8 @@ img {
 /* For large devices */
 @media screen and (min-width: 1040px) {
   .container {
-    margin-left: auto;
-    margin-right: auto;
+    margin: 0 auto;
+    max-width: 1200px;
   }
 
   .shape__big {
@@ -1007,7 +1061,9 @@ img {
 
   .home__container {
     padding-top: 2rem;
+    padding-top: 5vh;
   }
+  
 
   .home__img {
     width: 380px;
@@ -1039,6 +1095,7 @@ img {
   .about__description {
     padding-right: 4rem;
     margin-bottom: 3rem;
+    line-height: 1.6;
   }
 
   .popular__container {
@@ -1128,6 +1185,7 @@ img {
 
   .offer__description {
     padding-right: 6rem;
+    line-height: 1.6;
   }
 
   .offer__img {
@@ -1136,6 +1194,7 @@ img {
 
   .logos__container {
     grid-template-columns: repeat(6, max-content);
+    justify-content: center;
   }
 
   .logos__img {
@@ -1170,6 +1229,7 @@ img {
   .footer__copy {
     margin-top: 8rem;
     padding-bottom: 1rem;
+    font-size: 1rem;
   }
 
   .scrollup {
