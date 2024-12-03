@@ -349,11 +349,13 @@ img {
 }
 
 .home .shape__big {
+  position: absolute;
   left: -15%;
   top: -10%;
 }
 
 .home .shape__small {
+  position: absolute;
   right: -20%;
   bottom: 10%;
 }
@@ -559,31 +561,34 @@ img {
 .features__img {
   width: 150px;
   justify-self: center;
+  z-index: var(--z-overlay);
 }
 
 .features__card {
   width: 112px;
-  background-color: hsla(0, 0%, -100%, .1);
+  background-color: hsla(0, 9%, 61%, 0.13);
   backdrop-filter: blur(16px);
   border-radius: 1.25rem;
   text-align: center;
   color: var(--title-color);
   position: absolute;
+  padding: 0.5rem;
+  z-index: var(--z-overlay);
 }
 
 .features__card-1 {
-  top: 4rem;
-  left: 1.5rem;
+  top: 30%;
+  left: 5%;
 }
 
 .features__card-2 {
-  top: 8rem;
-  right: 1rem;
+  top: 50%;
+  right: 5%;
 }
 
 .features__card-3 {
-  left: 1.5rem;
-  bottom: 2rem;
+  left: 15%;
+  bottom: 20%;
 }
 
 .features__card-title {
@@ -1128,16 +1133,16 @@ img {
   }
 
   .features__card-1 {
-    left: -1rem;
+    left: 25%
   }
 
   .features__card-2 {
-    right: -2.5rem;
+    right: 30%;
   }
 
   .features__card-3 {
     bottom: 7rem;
-    left: -1rem;
+    left: 30%
   }
 
   .featured__map {
